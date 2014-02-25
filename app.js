@@ -22,7 +22,13 @@ var passportConf = require('./config/passport');
  * Mongoose configuration.
  */
 
-mongoose.connect(secrets.db);
+var uristring =
+process.env.MONGOLAB_URI ||
+process.env.MONGOHQ_URL ||
+'localhost';
+
+
+mongoose.connect(uristring);
 mongoose.connection.on('error', function() {
   console.log('← MongoDB Connection Error →');
 });
