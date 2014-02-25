@@ -106,6 +106,7 @@ exports.postTime = function(req, res) {
 
 //ATX Group Times
 exports.getAtxTime = function(req, res, next){
+
 	//Check for null group and redirect
 	Group.findOne({name: 'atxs' }, function(err, group){
 		if(err) return next(err);
@@ -118,28 +119,19 @@ exports.getAtxTime = function(req, res, next){
 
 //POST Group Times
 exports.postAtxTime = function(req, res){
-	//Preffered time
-	// var time = req.param('time');
-	//Check for forgery
+	
+
 	var selectedTime = req.param('selected');
 	res.cookie('availableTime', selectedTime);
-	console.log(selectedTime);
-	//Access cookie
-	// req.cookies.availableTime;
+	
+	//Check for forgery
 	//Add group time check to make sure time submitted exists
 	if(req.user){
-		res.redirect('/users');
+		res.redirect('/group/success');
 	}else{
 		res.redirect('/login');
 	}
-	
-	// Group.findOne({name: 'atxs' }, function(err, group){
-	// 	if(err) return next(err);
-	// 	//Redirect back to group page - this group may have been deleted
-	// 	if(!group) return next(new Error("Cannot find group"));
-	// 	
-	// 	res.render('groups/time', {group: group});
-	// });
+
 }
 
 exports.getRules = function(req, res){

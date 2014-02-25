@@ -128,12 +128,12 @@ app.get('/groups', passportConf.isAdmin, groupController.index);
 app.get('/group/new', passportConf.isAdmin, groupController.new);
 app.post('/group/create', passportConf.isAdmin, groupController.create);
 //Group secret
-app.get('/group/secret', passportConf.isAdmin, groupController.secret);
-app.post('/group/secret', passportConf.isAdmin, groupController.secretSubmit);
+// app.get('/group/secret', passportConf.isAdmin, groupController.secret);
+// app.post('/group/secret', passportConf.isAdmin, groupController.secretSubmit);
 //Group time
-app.get('/group/time', passportConf.isAdmin, groupController.getTime)
+// app.get('/group/time', passportConf.isAdmin, groupController.getTime)
 // app.post('/group/time', groupController.postTime);
-app.post('/group/time', passportConf.isAdmin, groupController.postAtxTime);
+app.post('/group/time', groupController.postAtxTime);
 //ATX Group time
 app.get('/atxs/time', groupController.getAtxTime)
 // app.post('/group/time', groupController.postTime);

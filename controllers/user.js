@@ -148,6 +148,8 @@ exports.postSignup = function(req, res, next) {
 
   var errors = req.validationErrors();
   var available = req.cookies.availableTime;
+console.log(req.cookies);
+	console.log(available);
 
   if (errors) {
     req.flash('errors', errors);
