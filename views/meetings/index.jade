@@ -1,0 +1,8 @@
+extends ../layout
+
+block content
+  p.lead Hello list : ) <strong>#{count}</strong>
+
+  each m in meetings
+    div personOne:<strong>#{m.personOne.email}</strong> - personTwo:<strong>#{m.personTwo.email}</strong> at <strong>#{m.scheduleTime}</strong>
+    br

@@ -1,0 +1,25 @@
+extends ../layout
+
+
+block content
+  form(method='POST' action="/meeting/scheduleOne")
+    p.lead Schedule One
+      .form-group
+        input.form-control(type='email', name='personOne', id='personOne', placeholder='Email')
+      .form-group
+        input.form-control(type='email', name='personTwo', id='personTwo', placeholder='Email')
+      .form-group
+          button.btn.btn-primary(type='submit') Submit
+  form(method='POST' action="/meeting/schedule")
+    p.lead Schedule All
+      .form-group
+        input.form-control(type='text', name='group', id='group', placeholder='Group')
+      .form-group
+        input.form-control(type='text', name='date', id='date', placeholder='Date')
+      .form-group
+          button.btn.btn-primary(type='submit') Submit
+  p.lead Hello list : )
+  each u in users
+    div email:<strong>#{u.email}</strong> - username:#{u.profile.name} - Group:<strong>#{u.group}</strong> - available:<strong>#{u.available}</strong> - confirmed:#{u.confirmed} - scheduled:#{u.scheduled}
+    br
+

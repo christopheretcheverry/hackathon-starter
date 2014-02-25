@@ -1,0 +1,10 @@
+extends ../layout
+
+
+block content
+  p.lead Profile : )
+
+  each m in meetings
+    div #{m.scheduleTime} | #{m.personOne.email} | #{m.personTwo.email}
+
+

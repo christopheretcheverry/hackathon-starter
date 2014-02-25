@@ -2,8 +2,8 @@ module.exports = {
   db: 'localhost',
 
   sendgrid: {
-    user: 'Your SendGrid Username',
-    password: 'Your SendGrid Password'
+    user: 'christopheretcheverry',
+    password: '12qwaszx'
   },
 
   nyt: {
@@ -16,8 +16,8 @@ module.exports = {
   },
 
   facebook: {
-    clientID: 'Your App ID',
-    clientSecret: 'Your App Secret',
+    clientID: '587214321372894',
+    clientSecret: '53cd8b277a5f3931292a88af66caeb8a',
     callbackURL: '/auth/facebook/callback',
     passReqToCallback: true
   },

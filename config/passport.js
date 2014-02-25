@@ -34,6 +34,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, function(email, passw
 }));
 
 passport.use(new FacebookStrategy(secrets.facebook, function (req, accessToken, refreshToken, profile, done) {
+  var available = req.cookies.availableTime;
   if (req.user) {
     User.findById(req.user.id, function(err, user) {
       user.facebook = profile.id;
@@ -41,6 +42,8 @@ passport.use(new FacebookStrategy(secrets.facebook, function (req, accessToken, 
       user.profile.name = user.profile.name || profile.displayName;
       user.profile.gender = user.profile.gender || profile._json.gender;
       user.profile.picture = user.profile.picture || profile._json.profile_image_url;
+      // user.group = 'atxs';
+      // user.available = available;
       user.save(function(err) {
         done(err, user);
       });
@@ -49,12 +52,16 @@ passport.use(new FacebookStrategy(secrets.facebook, function (req, accessToken, 
     User.findOne({ facebook: profile.id }, function(err, existingUser) {
       if (existingUser) return done(null, existingUser);
       var user = new User();
+	  console.log('fb data: %j', profile);
       user.email = profile._json.email;
       user.facebook = profile.id;
       user.tokens.push({ kind: 'facebook', accessToken: accessToken });
       user.profile.name = profile.displayName;
       user.profile.gender = profile._json.gender;
-      user.profile.picture = profile._json.profile_image_url;
+      var fbPicture = 'https://graph.facebook.com/' + profile.id + '/picture?height=75';
+      user.profile.picture = fbPicture;
+      user.group = 'atxs';
+      user.available = available;
       user.save(function(err) {
         done(err, user);
       });
@@ -197,4 +204,20 @@ exports.isAuthorized = function(req, res, next) {
   var provider = req.path.split('/').slice(-1)[0];
   if (_.findWhere(req.user.tokens, { kind: provider })) next();
   else res.redirect('/auth/' + provider);
+};
+
+exports.isAdmin = function(req, res, next){
+
+	if(req.isAuthenticated()){
+		console.log(req.user.roles);
+		console.log("authed");
+		if(_.contains(req.user.roles, "Admin")){
+			console.log('next');
+			return next();
+		} else {
+			// return res.redirect('/login');
+			return res.render('404');
+		}
+	}
+	return res.redirect('/login');
 };

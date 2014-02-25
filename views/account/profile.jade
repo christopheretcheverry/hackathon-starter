@@ -12,8 +12,9 @@ block content
       = success
 
   .page-header
-    h3 Profile Information
-
+    .form-group
+      h3 #{user.profile.name}'s Profile Information
+      img(src='#{user.profile.picture}')
   form.form-horizontal(action='/account/profile', method='POST')
     .form-group
       label.col-xs-2.control-label(for='email') Email

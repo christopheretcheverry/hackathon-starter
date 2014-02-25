@@ -7,7 +7,7 @@ html
     meta(name='description', content='')
     meta(name='author', content='')
 
-    title #{title} - Starter Template for Bootstrap
+    title ATX Coffee
 
     link(href='/css/lib/font-awesome.min.css', rel='stylesheet')
     link(href='/css/lib/animate.css', rel='stylesheet')
@@ -17,6 +17,25 @@ html
     script(src='/js/lib/jquery.js')
     script(src='/js/lib/bootstrap.js')
     script(src='/js/main.js')
+    script.
+        if (window.location.hash && window.location.hash == '#_=_') {
+            window.location.hash = '';
+        }
+        if (window.location.hash && window.location.hash == '#_=_') {
+            if (window.history && history.pushState) {
+                window.history.pushState("", document.title, window.location.pathname);
+            } else {
+                // Prevent scrolling by storing the page's current scroll offset
+                var scroll = {
+                    top: document.body.scrollTop,
+                    left: document.body.scrollLeft
+                };
+                window.location.hash = '';
+                // Restore the scroll offset, should be flicker free
+                document.body.scrollTop = scroll.top;
+                document.body.scrollLeft = scroll.left;
+            }
+        }
   body
     #wrap
       .navbar.navbar-default.navbar-fixed-top
@@ -27,7 +46,7 @@ html
               span.icon-bar
               span.icon-bar
               span.icon-bar
-            a.navbar-brand(href='/') Project name
+            a.navbar-brand(href='/') ATX Coffee
           .collapse.navbar-collapse
             ul.nav.navbar-nav
               li(class=title=='Home'?'active':undefined)
@@ -36,6 +55,12 @@ html
                 a(href='/api') API Browser
               li(class=title=='Contact'?'active':undefined)
                 a(href='/contact') Contact
+              li(class=title=='Groups'?'active':undefined)
+                a(href='/groups') Groups
+              li(class=title=='Users'?'active':undefined)
+                a(href='/users') Users
+              li(class=title=='Meetings'?'active':undefined)
+                a(href='/meetings') Meetings
             ul.nav.navbar-nav.navbar-right
               if !user
                 li(class=title=='Login'?'active':undefined)

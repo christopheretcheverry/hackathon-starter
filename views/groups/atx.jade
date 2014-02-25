@@ -1,0 +1,37 @@
+extends ../slimLayout
+
+block content
+	div.flash-message
+		div.logo Everyone is doing it ;)
+	div.container
+		div.col-sm-10.col-sm-offset-2
+			div.header
+				h1 Meet people from Austin Startups
+			div.row
+				div.details.col-sm-10 We introduce you to a couple people from your network to grab drinks with. All you do is pick a time and we do the rest. We will send you an email when everything is setup.
+			div.row
+				div.col-sm-10.details What time works best for you? (select one)
+			div.row
+				each t in group.times
+					div.col-sm-5
+						div.datetime-radio
+							input(type="hidden" class="hiddenTime" value="#{t}")
+							div.box-date.col-xs-6 
+								div.row.month #{moment(t).format('MMMM')}
+								div.row.day #{moment(t).format('DD')}
+							div.box-time.col-xs-6 #{moment(t).format('h:mm a')}
+			div.row
+				div.details.col-sm-10 Before you schedule a meeting we have a couple of tips:
+				div.rules.col-sm-10
+					ul
+						li Don't no show
+						li Be on time
+						li No cancellations
+						li Have fun!
+			div.row
+				div.col-sm-10 
+					form(method="POST" action="/group/time" id="timeSelect")
+						input(type="hidden" class="selected" name="selected")
+						a.btn.btn-primary.submit Schedule
+			div.row
+				div.details.col-sm-10 We ask you to login on the next page

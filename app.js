@@ -11,16 +11,6 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var expressValidator = require('express-validator');
 
-
-/**
- * Load controllers.
- */
-
-var homeController = require('./controllers/home');
-var userController = require('./controllers/user');
-var apiController = require('./controllers/api');
-var contactController = require('./controllers/contact');
-
 /**
  * API keys + Passport configuration.
  */
@@ -53,7 +43,7 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(expressValidator());
 app.use(express.methodOverride());
-app.use(express.session({ secret: 'your secret code' }));
+app.use(express.session({ secret: 'atxcoffee' }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(function(req, res, next) {
@@ -70,11 +60,27 @@ app.use(function(req, res) {
 });
 app.use(express.errorHandler());
 
+app.locals.moment = require('moment');
+
+/**
+ * Load controllers.
+ */
+
+var homeController = require('./controllers/home');
+var userController = require('./controllers/user');
+var apiController = require('./controllers/api');
+var contactController = require('./controllers/contact');
+var groupController = require('./controllers/group');
+var meetingController = require('./controllers/meeting');
+
 /**
  * Application routes.
  */
 
-app.get('/', homeController.index);
+//Index
+app.get('/', groupController.getAtxTime);
+// app.get('/:name', userController.getAccount)
+app.get('/profile', passportConf.isAdmin, userController.getProfile);
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
 app.get('/logout', userController.logout);
@@ -82,33 +88,62 @@ app.get('/signup', userController.getSignup);
 app.post('/signup', userController.postSignup);
 app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
-app.get('/account', passportConf.isAuthenticated, userController.getAccount);
-app.post('/account/profile', passportConf.isAuthenticated, userController.postUpdateProfile);
-app.post('/account/password', passportConf.isAuthenticated, userController.postUpdatePassword);
-app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
+
+app.get('/account', passportConf.isAdmin, userController.getAccount);
+app.post('/account/profile', passportConf.isAdmin, userController.postUpdateProfile);
+app.post('/account/password', passportConf.isAdmin, userController.postUpdatePassword);
+app.post('/account/delete', passportConf.isAdmin, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
-app.get('/api', apiController.getApi);
-app.get('/api/foursquare', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getFoursquare);
-app.get('/api/tumblr', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getTumblr);
-app.get('/api/facebook', passportConf.isAuthenticated, apiController.getFacebook);
-app.get('/api/scraping', apiController.getScraping);
-app.get('/api/github', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getGithub);
-app.get('/api/lastfm', apiController.getLastfm);
-app.get('/api/nyt', apiController.getNewYorkTimes);
-app.get('/api/twitter', passportConf.isAuthenticated, apiController.getTwitter);
-app.get('/api/aviary', apiController.getAviary);
+app.get('/api', passportConf.isAdmin, apiController.getApi);
+// app.get('/api/foursquare', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getFoursquare);
+// app.get('/api/tumblr', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getTumblr);
+app.get('/api/facebook', passportConf.isAdmin, apiController.getFacebook);
+// app.get('/api/scraping', apiController.getScraping);
+// app.get('/api/github', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getGithub);
+// app.get('/api/lastfm', apiController.getLastfm);
+// app.get('/api/nyt', apiController.getNewYorkTimes);
+// app.get('/api/twitter', passportConf.isAuthenticated, apiController.getTwitter);
+// app.get('/api/aviary', apiController.getAviary);
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login' }));
-app.get('/auth/github', passport.authenticate('github'));
-app.get('/auth/github/callback', passport.authenticate('github', { successRedirect: '/', failureRedirect: '/login' }));
-app.get('/auth/google', passport.authenticate('google', { scope: 'profile email' }));
-app.get('/auth/google/callback', passport.authenticate('google', { successRedirect: '/', failureRedirect: '/login' }));
-app.get('/auth/twitter', passport.authenticate('twitter'));
-app.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/login' }));
-app.get('/auth/foursquare', passport.authorize('foursquare'));
-app.get('/auth/foursquare/callback', passport.authorize('foursquare', { failureRedirect: '/api' }), function(req, res) { res.redirect('/api/foursquare'); });
-app.get('/auth/tumblr', passport.authorize('tumblr'));
-app.get('/auth/tumblr/callback', passport.authorize('tumblr', { failureRedirect: '/api' }), function(req, res) { res.redirect('/api/tumblr'); });
+app.get('/auth/facebook/callback', passport.authenticate('facebook', { successRedirect: '/group/success/', failureRedirect: '/login' }));
+// app.get('/auth/github', passport.authenticate('github'));
+// app.get('/auth/github/callback', passport.authenticate('github', { successRedirect: '/', failureRedirect: '/login' }));
+// app.get('/auth/google', passport.authenticate('google', { scope: 'profile email' }));
+// app.get('/auth/google/callback', passport.authenticate('google', { successRedirect: '/', failureRedirect: '/login' }));
+// app.get('/auth/twitter', passport.authenticate('twitter'));
+// app.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/login' }));
+// app.get('/auth/foursquare', passport.authorize('foursquare'));
+// app.get('/auth/foursquare/callback', passport.authorize('foursquare', { failureRedirect: '/api' }), function(req, res) { res.redirect('/api/foursquare'); });
+// app.get('/auth/tumblr', passport.authorize('tumblr'));
+// app.get('/auth/tumblr/callback', passport.authorize('tumblr', { failureRedirect: '/api' }), function(req, res) { res.redirect('/api/tumblr'); });
+
+//Groups
+app.get('/groups', passportConf.isAdmin, groupController.index);
+app.get('/group/new', passportConf.isAdmin, groupController.new);
+app.post('/group/create', passportConf.isAdmin, groupController.create);
+//Group secret
+app.get('/group/secret', passportConf.isAdmin, groupController.secret);
+app.post('/group/secret', passportConf.isAdmin, groupController.secretSubmit);
+//Group time
+app.get('/group/time', passportConf.isAdmin, groupController.getTime)
+// app.post('/group/time', groupController.postTime);
+app.post('/group/time', passportConf.isAdmin, groupController.postAtxTime);
+//ATX Group time
+app.get('/atxs/time', groupController.getAtxTime)
+// app.post('/group/time', groupController.postTime);
+//Group confirm plus rules
+app.get('/group/rules', passportConf.isAdmin, groupController.getRules);
+app.post('/group/rules', passportConf.isAdmin, groupController.postRules);
+//Group success waiting for schedule
+app.get('/group/success', groupController.getSuccess);
+
+//Users
+app.get('/users', passportConf.isAdmin, userController.index);
+
+//Meetings
+app.get('/meetings', passportConf.isAdmin, meetingController.index);
+app.post('/meeting/scheduleOne', passportConf.isAdmin, meetingController.scheduleOne);
+app.post('/meeting/schedule', passportConf.isAdmin, meetingController.schedule);
 
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));

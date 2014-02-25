@@ -88,6 +88,7 @@ exports.getTumblr = function(req, res) {
 exports.getFacebook = function(req, res, next) {
   var token = _.findWhere(req.user.tokens, { kind: 'facebook' });
   graph.setAccessToken(token.accessToken);
+  // console.log('token: ' + token.accessToken);
   async.parallel({
     getMe: function(done) {
       graph.get(req.user.facebook, function(err, me) {
@@ -102,10 +103,14 @@ exports.getFacebook = function(req, res, next) {
   },
   function(err, results) {
     if (err) return next(err);
+
+	var me = results.getMe;
+	var friends = results.getMyFriends;
+
     res.render('api/facebook', {
       title: 'Facebook API',
-      me: results.getMe,
-      friends: results.getMyFriends
+      me: me,
+      friends: friends
     });
   });
 };

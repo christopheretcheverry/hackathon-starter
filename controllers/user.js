@@ -1,7 +1,23 @@
-var mongoose = require('mongoose');
 var passport = require('passport');
 var _ = require('underscore');
 var User = require('../models/User');
+var Meeting = require('../models/Meeting');
+var Group = require('../models/Group');
+
+
+exports.index = function(req, res){
+	// User.find({}).remove().exec();
+	// Meeting.find({}).remove().exec();
+	// User.update({ }, { $set: { scheduled: false }}, { multi: true }).exec();
+	
+	// Group.find({}).remove().exec();
+	User.find(function(err, users){
+		if (err) return next(err);
+		console.log(users);
+		res.render('users/index', {users: users, title: 'Users'});
+	});
+}
+
 
 /**
  * GET /login
@@ -29,6 +45,7 @@ exports.getSignup = function(req, res) {
   });
 };
 
+
 /**
  * GET /account
  * Profile page.
@@ -43,6 +60,29 @@ exports.getAccount = function(req, res) {
 };
 
 /**
+ * GET /account
+ * Profile page.
+ */
+
+exports.getProfile = function(req, res, next) {
+	var user = req.user;
+	Meeting.find({$or : [{personOne: user}, {personTwo: user}]})
+		.populate("personOne", "email")
+		.populate("personTwo", "email")
+		.exec(function(err, meetings){
+			if(err) return next(err);
+			console.log("Meetings: " + meetings);
+			res.render('users/profile', {
+				title: 'Profile',
+				user: user,
+				meetings: meetings,
+				success: req.flash('success'),
+				error: req.flash('error')
+			});
+	})
+};
+
+/**
  * POST /login
  * Sign in using email and password.
  * @param {string} email
@@ -50,29 +90,44 @@ exports.getAccount = function(req, res) {
  */
 
 exports.postLogin = function(req, res, next) {
-  req.assert('email', 'Email cannot be blank').notEmpty();
-  req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password cannot be blank').notEmpty();
+	req.assert('email', 'Email cannot be blank').notEmpty();
+	req.assert('email', 'Email is not valid').isEmail();
+	req.assert('password', 'Password cannot be blank').notEmpty();
+	
+	var prefferedTime = req.cookies.prefferedTime;
+	console.log("Post Login: " + prefferedTime);
 
-  var errors = req.validationErrors();
+	var errors = req.validationErrors();
 
-  if (errors) {
-    req.flash('errors', errors);
-    return res.redirect('/login');
-  }
+	if (errors) {
+		req.flash('errors', errors);
+		return res.redirect('/login');
+	}
 
-  passport.authenticate('local', function(err, user, info) {
-    if (err) return next(err);
+	passport.authenticate('local', function(err, user, info) {
+		if (err) return next(err);
 
-    if (!user) {
-      req.flash('errors', { msg: info.message });
-      return res.redirect('/login');
-    }
+		if (!user) {
+			req.flash('errors', { msg: info.message });
+			return res.redirect('/login');
+		}
 
-    req.logIn(user, function(err) {
-      if (err) return next(err);
-      return res.redirect('/');
-    });
+		req.logIn(user, function(err) {
+			if (err) return next(err);
+			return res.redirect('/group/success');
+			//Move to dispatch for other auth methods
+      		if(user.group == undefined || ""){
+				return res.redirect('/group/secret');
+			}else if(user.available == undefined){
+				return res.redirect('/group/time');
+			}else if(user.confirmed == false){
+				return res.redirect('/group/rules');
+			}else if(user.scheduled == false){
+				return res.redirect('/group/success');
+			}else{
+				return res.redirect('/profile');
+			};
+    	});
   })(req, res, next);
 };
 
@@ -85,22 +140,37 @@ exports.postLogin = function(req, res, next) {
 
 exports.postSignup = function(req, res, next) {
   req.assert('email', 'Email cannot be blank').notEmpty();
+  req.assert('username', 'Username cannot be blank').notEmpty();
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('password', 'Password cannot be blank').notEmpty();
   req.assert('password', 'Password must be at least 4 characters long').len(4);
   req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
   var errors = req.validationErrors();
+  var available = req.cookies.availableTime;
 
   if (errors) {
     req.flash('errors', errors);
     return res.redirect('/signup');
   }
 
+
   var user = new User({
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    group: 'atxs',
+    available: available,
+	roles: []
   });
+
+  console.log(req.body.email);
+
+  if(req.body.email == "christopheretcheverry@gmail.com"){
+	console.log('true');
+	user.roles.push("Admin");
+  }
+
+  console.log(user.roles);
 
   user.save(function(err) {
     if (err) {
@@ -111,7 +181,7 @@ exports.postSignup = function(req, res, next) {
     }
     req.logIn(user, function(err) {
       if (err) return next(err);
-      res.redirect('/');
+      return res.redirect('/group/success');
     });
   });
 };
@@ -174,7 +244,8 @@ exports.postUpdatePassword = function(req, res, next) {
  * Delete user account.
  * @param {string} id
  */
-
+//Don't allow delete yet
+//Update to remove matches and other related objects or just set isDeleted flag
 exports.postDeleteAccount = function(req, res, next) {
   User.remove({ _id: req.user.id }, function(err) {
     if (err) return next(err);

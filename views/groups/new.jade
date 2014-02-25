@@ -1,0 +1,11 @@
+extends ../layout
+
+block content
+
+  form(method='POST' action="/group/create")
+      p.lead Create Group
+      .form-group
+        label.control-label(for='gropuName') Name
+        input.form-control(type='text', name='groupName', id='groupName', placeholder='Group Name', autofocus=true)
+      .form-group
+          button.btn.btn-primary(type='submit') Add

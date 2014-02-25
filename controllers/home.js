@@ -4,7 +4,11 @@
  */
 
 exports.index = function(req, res) {
-  res.render('home', {
-    title: 'Home'
-  });
+	if(req.user){
+		return res.redirect('/profile')
+	}
+	
+	res.render('home', {
+		title: 'Home'
+	});
 };

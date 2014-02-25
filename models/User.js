@@ -11,7 +11,11 @@ var userSchema = new mongoose.Schema({
   twitter: { type: String, unique: true, sparse: true },
   google: { type: String, unique: true, sparse: true },
   github: { type: String, unique: true, sparse: true },
-
+  group: String,
+  available: Date,
+  confirmed: {type: Boolean, default: false},
+  scheduled: {type: Boolean, default: false},
+  roles: [],
   profile: {
     name: { type: String, default: '' },
     gender: { type: String, default: '' },

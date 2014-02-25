@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+  p.lead Rules :)
+  div I understand the rules
+
+  form(action="/group/rules" method="POST" id="rulesForm")
+    .form-group
+        button.btn.btn-primary(type='submit') Submit

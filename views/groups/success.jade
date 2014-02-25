@@ -1,0 +1,8 @@
+extends ../slimLayout
+
+block content
+	div.flash-message
+		div.logo Success : )
+	div.container(style="text-align:center;")
+		div.details Thanks, you are signed up for #{moment(user.available).format('MMMM DD h:mm A')}. 
+		div.details We will email you with details once everything is setup!

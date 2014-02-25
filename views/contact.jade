@@ -1,18 +1,16 @@
-extends layout
+extends slimLayout
 
 block content
+  div.flash-message
+    div.logo Contact Form
   if errors.length
     .alert.alert-danger.animated.fadeIn
-      for error in errors
-        div= error.msg
+    for error in errors
+      div= error.msg
   if success.length
     .alert.alert-success.animated.fadeIn
       p= success
-
-  .page-header
-    h3 Contact Form
-
-  form.form-horizontal(role='form', method='POST')
+  form.form-horizontal(role='form', method='POST', style="padding-top:40px;")
     .form-group
       label(class='col-sm-2 control-label', for='email') Name
       .col-sm-8

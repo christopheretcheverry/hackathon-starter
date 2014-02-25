@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+  p.lead Hello list : )
+
+  each g in groups
+    div= g.name
+      each time in g.times
+        span(style="border:1px solid black;padding:5px;display:inline-block;") #{moment(time).format('MM/DD/YYYY')}
+      span  | <strong>#{g.count}</strong>

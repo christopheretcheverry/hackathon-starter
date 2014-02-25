@@ -1,0 +1,8 @@
+extends ../layout
+
+block content
+  p.lead Pick a time : ) for #{group.name}
+  form(action="/group/time" method="POST" id="timeForm")
+    input(type="hidden",name="time",id="time")
+    each t in group.times
+      div(class="time") #{moment(t).format('MMMM DD, h:mm')}
