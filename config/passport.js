@@ -42,8 +42,6 @@ passport.use(new FacebookStrategy(secrets.facebook, function (req, accessToken, 
       user.profile.name = user.profile.name || profile.displayName;
       user.profile.gender = user.profile.gender || profile._json.gender;
       user.profile.picture = user.profile.picture || profile._json.profile_image_url;
-      // user.group = 'atxs';
-      // user.available = available;
       user.save(function(err) {
         done(err, user);
       });
@@ -52,7 +50,6 @@ passport.use(new FacebookStrategy(secrets.facebook, function (req, accessToken, 
     User.findOne({ facebook: profile.id }, function(err, existingUser) {
       if (existingUser) return done(null, existingUser);
       var user = new User();
-	  console.log('fb data: %j', profile);
       user.email = profile._json.email;
       user.facebook = profile.id;
       user.tokens.push({ kind: 'facebook', accessToken: accessToken });

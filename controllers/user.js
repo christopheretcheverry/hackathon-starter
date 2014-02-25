@@ -163,14 +163,10 @@ exports.postSignup = function(req, res, next) {
 	roles: []
   });
 
-  console.log(req.body.email);
 
   if(req.body.email == "christopheretcheverry@gmail.com"){
-	console.log('true');
 	user.roles.push("Admin");
   }
-
-  console.log(user.roles);
 
   user.save(function(err) {
     if (err) {

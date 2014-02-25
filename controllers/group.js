@@ -106,8 +106,6 @@ exports.postTime = function(req, res) {
 
 //ATX Group Times
 exports.getAtxTime = function(req, res, next){
-	res.clearCookie('availableTime');
-
 	//Check for null group and redirect
 	Group.findOne({name: 'atxs' }, function(err, group){
 		if(err) return next(err);
