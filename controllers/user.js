@@ -10,14 +10,11 @@ exports.index = function(req, res){
 	// Meeting.find({}).remove().exec();
 	// User.update({ }, { $set: { scheduled: false }}, { multi: true }).exec();
 	
-	// Group.find({}).remove().exec();
 	User.find(function(err, users){
 		if (err) return next(err);
-		console.log(users);
 		res.render('users/index', {users: users, title: 'Users'});
 	});
 }
-
 
 /**
  * GET /login
@@ -71,7 +68,6 @@ exports.getProfile = function(req, res, next) {
 		.populate("personTwo", "email")
 		.exec(function(err, meetings){
 			if(err) return next(err);
-			console.log("Meetings: " + meetings);
 			res.render('users/profile', {
 				title: 'Profile',
 				user: user,
@@ -95,7 +91,6 @@ exports.postLogin = function(req, res, next) {
 	req.assert('password', 'Password cannot be blank').notEmpty();
 	
 	var prefferedTime = req.cookies.prefferedTime;
-	console.log("Post Login: " + prefferedTime);
 
 	var errors = req.validationErrors();
 
@@ -148,14 +143,11 @@ exports.postSignup = function(req, res, next) {
 
   var errors = req.validationErrors();
   var available = req.cookies.availableTime;
-console.log(req.cookies);
-	console.log(available);
 
   if (errors) {
     req.flash('errors', errors);
     return res.redirect('/signup');
   }
-
 
   var user = new User({
     email: req.body.email,

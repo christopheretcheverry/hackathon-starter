@@ -20,6 +20,6 @@ block content
           button.btn.btn-primary(type='submit') Submit
   p.lead Hello list : )
   each u in users
-    div email:<strong>#{u.email}</strong> - username:#{u.profile.name} - Group:<strong>#{u.group}</strong> - available:<strong>#{u.available}</strong> - confirmed:#{u.confirmed} - scheduled:#{u.scheduled}
+    div email:<strong>#{u.email}</strong> - username:#{u.profile.name} - Group:<strong>#{u.group}</strong> - available:<strong>#{u.available}</strong> - confirmed:#{u.confirmed} - scheduled:#{u.scheduled} - facebook:#{u.profile.picture}/#{u.facebook}
     br
 
