@@ -142,6 +142,7 @@ app.get('/group/rules', passportConf.isAdmin, groupController.getRules);
 app.post('/group/rules', passportConf.isAdmin, groupController.postRules);
 //Group success waiting for schedule
 app.get('/group/success', groupController.getSuccess);
+app.post('/group/changeDate', passportConf.isAdmin, groupController.postChangeDate)
 
 //Users
 app.get('/users', passportConf.isAdmin, userController.index);

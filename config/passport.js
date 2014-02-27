@@ -206,13 +206,9 @@ exports.isAuthorized = function(req, res, next) {
 exports.isAdmin = function(req, res, next){
 
 	if(req.isAuthenticated()){
-		console.log(req.user.roles);
-		console.log("authed");
 		if(_.contains(req.user.roles, "Admin")){
-			console.log('next');
 			return next();
 		} else {
-			// return res.redirect('/login');
 			return res.render('404');
 		}
 	}

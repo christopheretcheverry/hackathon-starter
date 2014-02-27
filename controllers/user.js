@@ -109,6 +109,7 @@ exports.postLogin = function(req, res, next) {
 
 		req.logIn(user, function(err) {
 			if (err) return next(err);
+			//CHANGE THIS FOR PROD
 			return res.redirect('/group/success');
 			//Move to dispatch for other auth methods
       		if(user.group == undefined || ""){
@@ -237,10 +238,12 @@ exports.postUpdatePassword = function(req, res, next) {
 //Don't allow delete yet
 //Update to remove matches and other related objects or just set isDeleted flag
 exports.postDeleteAccount = function(req, res, next) {
-  User.remove({ _id: req.user.id }, function(err) {
+  var id = req.param('id') || req.user.id;
+  User.remove({ _id: id }, function(err) {
     if (err) return next(err);
-    req.logout();
-    res.redirect('/');
+	//Turn on later
+    // req.logout();
+    res.redirect('/users');
   });
 };
 

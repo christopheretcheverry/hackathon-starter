@@ -20,6 +20,9 @@ block content
           button.btn.btn-primary(type='submit') Submit
   p.lead Hello list : )
   each u in users
-    div email:<strong>#{u.email}</strong> - username:#{u.profile.name} - Group:<strong>#{u.group}</strong> - available:<strong>#{u.available}</strong> - confirmed:#{u.confirmed} - scheduled:#{u.scheduled} - facebook:#{u.profile.picture}/#{u.facebook}
+    div email:<strong>#{u.email}</strong> - id:#{u.id} - Group:<strong>#{u.group}</strong> - available:<strong>#{u.available}</strong> - confirmed:#{u.confirmed} - scheduled:#{u.scheduled} - facebook:#{u.profile.picture}/#{u.facebook}
+      form(method='POST' action="/account/delete" style="display:inline-block;")
+        input(type='hidden', name='id', value='#{u.id}')
+        button.btn(style="margin-left:10px;border:1px solid #bbb;") Delete
     br
 

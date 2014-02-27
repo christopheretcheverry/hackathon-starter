@@ -154,3 +154,22 @@ exports.postRules = function(req, res){
 exports.getSuccess = function(req, res){
 	res.render('groups/success', {user: req.user});
 }
+
+exports.postChangeDate = function(req, res){
+	var id = req.param("groupId");
+	var newDate = req.param("newDate");
+
+	var date = new Date(newDate);
+	var firstMorning = date.setHours(9);
+	var firstEvening = date.setHours(19);
+	var secondMorning = date.setHours(33);
+	var secondEvening = date.setHours(43);
+	var times = [firstMorning, firstEvening, secondMorning, secondEvening];
+	
+	Group.findOne({_id: id}, function(err, group){
+		group.times = times;
+		group.save(function(err,group){
+			res.redirect('/groups');
+		})
+	})
+}

@@ -6,5 +6,10 @@ block content
   each g in groups
     div= g.name
       each time in g.times
-        span(style="border:1px solid black;padding:5px;display:inline-block;") #{moment(time).format('MM/DD/YYYY')}
-      span  | <strong>#{g.count}</strong>
+        span(style="border:1px solid black;padding:5px;display:inline-block;") #{moment(time).format('MM/DD/YYYY hh:mm a')}
+      span  | <strong>#{g.count}</strong> 
+      span(style="display:inline-block;")
+        form(method='POST' action="/group/changeDate")
+          input(type='hidden', name='groupId', value='#{g.id}')
+          input(type='text', name='newDate', id='newDate', placeholder='Date')
+          button.btn(style="margin-left:10px;border:1px solid #bbb;") Change Date
