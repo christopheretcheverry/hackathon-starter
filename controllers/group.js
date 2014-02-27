@@ -163,7 +163,7 @@ exports.postChangeDate = function(req, res){
 	var firstMorning = date.setHours(9);
 	var firstEvening = date.setHours(19);
 	var secondMorning = date.setHours(33);
-	var secondEvening = date.setHours(43);
+	var secondEvening = date.setHours(19);
 	var times = [firstMorning, firstEvening, secondMorning, secondEvening];
 	
 	Group.findOne({_id: id}, function(err, group){
