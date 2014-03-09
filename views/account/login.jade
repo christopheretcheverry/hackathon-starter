@@ -1,6 +1,8 @@
 extends ../slimLayout
 
 block content
+	script mixpanel.track("Login View");
+	
 	div.flash-message
 		div.logo Sign in
 	if errors.length
