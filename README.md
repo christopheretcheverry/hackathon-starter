@@ -6,7 +6,7 @@ A kickstarter for **Node.js** web applications.
 **Live Demo**: http://hackathonstarter.herokuapp.com
 
 If you have attended any hackathons in the past then you know how much time it takes to
-get a project started. Decide on an idea, pick a programming language, pick a web framework,
+get a project started  a. Decide on an idea, pick a programming language, pick a web framework,
 pick a CSS framework. A while later, you will have an initial project up on GitHub, and only then can other team members
 start contributing. Or what about doing something as simple as OAuth 2.0 Authentication? You can spend hours
 on it if you are not familiar with how OAuth 2.0 works. *(As a side-note, over a year ago
